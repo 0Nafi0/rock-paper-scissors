@@ -9,8 +9,11 @@ function titleCase(string) {
     return new_string;
 }
 
-const body = document.querySelector("body");
+const contents = document.querySelector(".contents");
 const scoreboard = document.querySelector(".scoreboard");
+const buttons = document.querySelectorAll("button");
+const reset = document.createElement("button");
+reset.setAttribute("class", "reset");
 let playerScore = 0;
 let botScore = 0;
 
@@ -40,8 +43,28 @@ function playRound(playerChoice) {
     score.textContent = "Your Score: " + playerScore + "    " + "BOT Score: " + botScore;
     scoreboard.appendChild(score);
     scoreboard.removeChild(score.previousSibling);
-    body.appendChild(roundVerdict);
-    body.removeChild(roundVerdict.previousSibling);
+    contents.appendChild(roundVerdict);
+    contents.removeChild(roundVerdict.previousSibling);
+    if (playerScore == 5 || botScore == 5)
+    {
+    const game_over = document.createElement("div");
+    game_over.setAttribute("class", "game-over");
+    buttons.forEach((button) => {
+        button.disabled = true;
+    })
+    reset.textContent = "Play Again";
+    if (playerScore > botScore)
+    {
+        game_over.textContent = "You've Done it ! Congratulations!";
+    }
+    else
+    {
+        game_over.textContent = "Damn You suck so bad";
+    }
+    contents.appendChild(game_over);
+    contents.appendChild(reset);
+
+    }
 }
 
 let win_condition = {
@@ -50,9 +73,13 @@ let win_condition = {
     "Scissors": "Paper",
 };
 
-const buttons = document.querySelectorAll("button");
+
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
         playRound(button.className);
     })
+})
+
+reset.addEventListener("click", () => {
+    location.reload();
 })
